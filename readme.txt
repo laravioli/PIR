@@ -13,3 +13,5 @@ nb: ne pas oublier de changer le type dans les "fprint" du code c
 
 faire 1 dossier data, un dossier machine learning(ml), un dossier ingest
 (avec le sem1_bin_csv et le script python pour dl les données)
+
+test git
