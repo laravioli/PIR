@@ -1,0 +1,8 @@
+1.https://satdat.ngdc.noaa.gov/sem/poes/docs/sem1_docs/TIROS-NOAA_SEM_Data_Archive_Documentation_1995-update.pdf
+SEM1 raw data
+2.https://www.ngdc.noaa.gov/stp/satellite/poes/docs/NGDC/MEPED%20telescope%20processing%20ATBD_V1.pdf
+SEM2 processing
+3. read yando and al [2012] about contamination
+4.https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019SW002402
+machine learning using SEM data article
+
