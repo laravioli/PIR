@@ -12,6 +12,7 @@
     "editor.formatOnSave": true,
     "python.formatting.provider": "black",
     "python.analysis.extraPaths": [
-        "C:\\Users\\Victor\\Desktop\\PIR\\data"
+        "C:\\Users\\Victor\\Desktop\\PIR\\data",
+        "C:\\Users\\Victor\\Desktop\\PIR\\process"
     ]
 }

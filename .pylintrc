@@ -1,0 +1,2 @@
+[Master]
+init-hook='import sys; sys.path = [C:\Users\Victor\Desktop\PIR] + sys.path'

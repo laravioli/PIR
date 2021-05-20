@@ -15,3 +15,10 @@ faire 1 dossier data, un dossier machine learning(ml), un dossier ingest
 (avec le sem1_bin_csv et le script python pour dl les données)
 
 test git
+
+def fyear2datetime(year):
+  iyear = int(year)
+  y = datetime(iyear,1,1)
+  yn = datetime(iyear+1,1,1)
+  dt = yn-y
+  return y + (year-iyear)*dt
