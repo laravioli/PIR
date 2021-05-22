@@ -1,4 +1,3 @@
-from msilib.schema import File
 import os
 import re
 import numpy as np
@@ -89,12 +88,9 @@ def map_to_frame(filename):
     filename = Path(filename)
     values, meta = read(filename)
 
-    date = meta["x"]
-    L = meta["y_mean"]
+    df = pd.DataFrame(data=values[:, 2:], index=meta["x"], columns=meta["y_mean"][2:])
 
-    df=pd.DataFrame(data=values, index=values[])
-
-    return dataframe
+    return df
 
 
 def plot_map(filename):
@@ -105,11 +101,3 @@ def plot_map(filename):
     plt.gca().set_title(meta["title"])
     plt.xlabel(meta["x_title"])
     plt.ylabel(meta["  y_title"])
-
-
-def get_data_files():
-
-    data_path = Path("data/NPOES_DATA")
-    folders = [os.path.join(data_path, f) for f in os.listdir(data_path)]
-
-    return folders
