@@ -14,5 +14,6 @@
     "python.analysis.extraPaths": [
         "C:\\Users\\Victor\\Desktop\\PIR\\data",
         "C:\\Users\\Victor\\Desktop\\PIR\\process"
-    ]
+    ],
+    "jupyter.jupyterServerType": "local"
 }

@@ -20,6 +20,9 @@ df_Ch009 = pd.DataFrame(pd.read_pickle(Path("process/Ch009.pkl")))
 df_Ch020 = pd.DataFrame(pd.read_pickle(Path("process/Ch020.pkl")))
 df_Ch022 = pd.DataFrame(pd.read_pickle(Path("process/Ch022.pkl")))
 
+df = np.dstack((df_Ch001.values, df_Ch009.values, df_Ch020.values))
+
+
 # import torch.utils.data as data_utils
 
 # # Creating np arrays

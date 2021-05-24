@@ -34,3 +34,11 @@ def fyear2datetime(year):
   yn = datetime(iyear+1,1,1)
   dt = yn-y
   return y + (year-iyear)*dt
+
+
+  demain : mettre en forme l'input (48,4021,3)
+  ecrire un train loader, val loader. 
+  faire tourner le modele relu
+  computer une donnée(voir l'erreur)
+
+  se renseigner sur svm

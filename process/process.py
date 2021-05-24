@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from scipy.stats import gaussian_kde
+
 
 def fyear2datetime(year):
 
@@ -51,4 +53,20 @@ def plot_processing(df, df1, df2, L):
     plt.plot(df.index, df.iloc[:, L])
     plt.plot(df2.index, df2.iloc[:, L], color="red")
     plt.title("normalise then resample")
+    plt.show()
+
+
+def plot_gaussien_kde(x, y):
+    # plot 2 Ch_xxx at a given L
+
+    # Calculate the point density
+    xy = np.vstack([x, y])
+    z = gaussian_kde(xy)(xy)
+
+    # Sort the points by density, so that the densest points are plotted last
+    idx = z.argsort()
+    x, y, z = x[idx], y[idx], z[idx]
+
+    fig, ax = plt.subplots()
+    ax.scatter(x, y, c=z, s=50)
     plt.show()
