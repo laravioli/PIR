@@ -1,4 +1,3 @@
-from re import A
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -17,6 +16,7 @@ dfs_processed = []
 
 for df_Ch in dfs:
 
+    df_Ch.columns = df_Ch022.columns
     df = format_data(df_Ch, df_Ch022)
     df = resample_time(df, df_Ch022)
     dfs_processed.append(df)

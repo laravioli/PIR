@@ -14,8 +14,8 @@ for d in os.listdir(data_dir):
     frames = [map_to_frame(f) for f in files]
     df = pd.concat(frames)
     df.name = d
-    print(df.name)
     df_map[d] = df
 
 for name, df in df_map.items():
+
     df.to_pickle(Path(f"data/{name}.pkl"))
