@@ -41,4 +41,26 @@ def fyear2datetime(year):
   faire tourner le modele relu
   computer une donnée(voir l'erreur)
 
-  se renseigner sur svm
+ hparamsn = [1, 2, 3, 4, ...]
+
+# Prepare the Grid
+param_grid = dict(hparams1=hparams1, 
+                  hparams2=hparams2, 
+                  ...
+                  hparamsn=hparamsn)
+
+# GridSearch in action
+grid = GridSearchCV(estimator=model, 
+                    param_grid=param_grid, 
+                    n_jobs=, 
+                    cv=,
+                    verbose=)
+grid_result = grid.fit(x, y)
+
+# Show the results
+print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
+means = grid_result.cv_results_['mean_test_score']
+stds = grid_result.cv_results_['std_test_score']
+params = grid_result.cv_results_['params']
+for mean, stdev, param in zip(means, stds, params):
+    print("%f (%f) with: %r" % (mean, stdev, param)
