@@ -18,8 +18,11 @@ for df_Ch in dfs:
 
     df_Ch.columns = df_Ch022.columns
     df_Ch = resample_time(df_Ch, df_Ch022)
+    df_Ch.replace(-1, 0.01, inplace=True)
+
     dfs_processed.append(df_Ch)
 
+df_Ch022.replace(-1, 0.01, inplace=True)
 dfs_processed.append(df_Ch022)
 
 name = ["Ch001", "Ch009", "Ch020", "Ch022"]
