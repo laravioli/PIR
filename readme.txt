@@ -64,3 +64,11 @@ stds = grid_result.cv_results_['std_test_score']
 params = grid_result.cv_results_['params']
 for mean, stdev, param in zip(means, stds, params):
     print("%f (%f) with: %r" % (mean, stdev, param)
+
+
+
+preprocessing: 
+je fit l'input avec minmax, plus besoin d'y toucher
+je fit l'output:
+1) minmax, seule l'echelle est changer, refit l'echelle avec le scaler du training(+val)
+2)log puis minmax, refit avec lechelle du training puis 10**y

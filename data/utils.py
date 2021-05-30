@@ -88,7 +88,7 @@ def map_to_frame(filename):
     filename = Path(filename)
     values, meta = read(filename)
 
-    df = pd.DataFrame(data=values[:, 2:], index=meta["x"], columns=meta["y_mean"][2:])
+    df = pd.DataFrame(data=values[:, 15:], index=meta["x"], columns=meta["y_mean"][15:])
 
     return df
 
@@ -100,4 +100,5 @@ def plot_map(filename):
     plt.pcolormesh(meta["x"], meta["y_mean"], data.T, norm=LogNorm(), shading="auto")
     plt.gca().set_title(meta["title"])
     plt.xlabel(meta["x_title"])
-    plt.ylabel(meta["  y_title"])
+    plt.ylabel(meta["y_title"])
+    plt.show()

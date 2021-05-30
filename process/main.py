@@ -17,12 +17,11 @@ dfs_processed = []
 for df_Ch in dfs:
 
     df_Ch.columns = df_Ch022.columns
-    df = format_data(df_Ch, df_Ch022)
-    df = resample_time(df, df_Ch022)
-    dfs_processed.append(df)
+    df_Ch = resample_time(df_Ch, df_Ch022)
+    dfs_processed.append(df_Ch)
 
-dfs_processed.append(format_data(df_Ch022, df_Ch022))
+dfs_processed.append(df_Ch022)
 
 name = ["Ch001", "Ch009", "Ch020", "Ch022"]
-for name, df in zip(name, dfs_processed):
-    df.to_pickle(Path(f"process/{name}.pkl"))
+for name, df_Ch in zip(name, dfs_processed):
+    df_Ch.to_pickle(Path(f"process/{name}.pkl"))

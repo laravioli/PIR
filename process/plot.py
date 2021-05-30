@@ -22,3 +22,5 @@ df2 = format_data(df, df_Ch022)
 df2 = resample_time(df2, df_Ch022)
 
 plot_processing(format_data(df, df_Ch022), df1, df2, L)
+
+print(format_data(df_Ch022, df_Ch022))
