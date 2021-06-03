@@ -88,7 +88,9 @@ def map_to_frame(filename):
     filename = Path(filename)
     values, meta = read(filename)
 
-    df = pd.DataFrame(data=values[:, 15:], index=meta["x"], columns=meta["y_mean"][15:])
+    df = pd.DataFrame(
+        data=values[:, 15:-1], index=meta["x"], columns=meta["y_mean"][15:-1]
+    )
 
     return df
 
