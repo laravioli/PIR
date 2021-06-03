@@ -72,3 +72,8 @@ je fit l'input avec minmax, plus besoin d'y toucher
 je fit l'output:
 1) minmax, seule l'echelle est changer, refit l'echelle avec le scaler du training(+val)
 2)log puis minmax, refit avec lechelle du training puis 10**y
+
+comment est calculer l'erreur ?
+sample par sample, en appliquant des poids aux output, puis en prenant la moyenne
+sur le vecteur output. par default, poids uniforme (donc on fait la moyenne sur les outputs)
+sklearn: multioutput= "raw_values", permet d'avoir la metric output par output

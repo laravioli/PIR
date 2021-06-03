@@ -1,7 +1,8 @@
-from math import floor, ceil
-from typing import Tuple
 import numpy as np
 import pandas as pd
+import torch
+
+from math import floor
 
 
 def data_scale(df, scaler, log_scale=False, output=False):
@@ -18,6 +19,27 @@ def data_scale(df, scaler, log_scale=False, output=False):
         return df_scaled, scaler
     else:
         return df_scaled
+
+
+def CNN_data_target_scaled(df_input, df_output, scaler, LOG_SCALE=False):
+
+    df_input_scaled = []
+
+    for df in df_input:
+        df_input_scaled.append(data_scale(df, scaler, LOG_SCALE))
+
+    df_output_scaled, output_scaler = data_scale(
+        df_output, scaler, LOG_SCALE, output=True
+    )
+
+    data_scaled = np.dstack(df_input_scaled)
+    data_scaled = np.expand_dims(data_scaled, axis=1)
+    data_scaled = torch.tensor(data_scaled, dtype=torch.float)
+
+    target_scaled = df_output_scaled.copy().values
+    target_scaled = torch.tensor(target_scaled, dtype=torch.float)
+
+    return data_scaled, target_scaled, output_scaler
 
     """
 Utility function for computing output of convolutions
@@ -46,13 +68,3 @@ def conv_output_shape(h_w, kernel_size=1, stride=1, pad=0, dilation=1):
     )
 
     return h, w
-
-    """
-Laboratory for CNN shape
-"""
-
-
-# print("conv1 :", conv_output_shape((34, 3), 3, pad=1), 34 * 3 * 50)
-# print("maxpool2d :", conv_output_shape((34, 3), (2, 1), stride=(2, 1)), 17 * 3 * 50)
-# print("conv2 :", conv_output_shape((17, 3), 3), 15 * 150)
-# print("maxpool2d :", conv_output_shape((15, 1), (3, 1), stride=(3, 1)), 5 * 150)
