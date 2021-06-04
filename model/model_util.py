@@ -2,16 +2,20 @@ import numpy as np
 import pandas as pd
 import torch
 
+from sklearn.preprocessing import MinMaxScaler
 from math import floor
 
 
-def data_scale(df, scaler, LOG_SCALE=False, output=False):
+def data_scale(df, log_noise=1, scaler=MinMaxScaler(), output=False):
+    # log scaling
+    if log_noise <= 0:
+        log_noise = 1
+    df = df.apply(
+        lambda x: x.clip(lower=x[x > 0].min() * log_noise) if x.min() <= 0 else x
+    )
+    df = df.apply(lambda x: np.log10(x))
 
-    if LOG_SCALE:
-        # df = df.apply(lambda x: x.clip(lower=x[x > 0].min()) if x.min() <= 0 else x)
-        df = df.apply(lambda x: x.clip(lower=0.01) if x.min() <= 0 else x)
-        df = df.apply(lambda x: np.log10(x))
-
+    # sklearn scaling
     scaler = scaler
     scaler.fit(df)
     df_scaled = pd.DataFrame(scaler.transform(df), index=df.index, columns=df.columns)
@@ -22,21 +26,22 @@ def data_scale(df, scaler, LOG_SCALE=False, output=False):
         return df_scaled
 
 
-def CNN_data_target_scaled(df_input, df_output, scaler, LOG_SCALE=False):
+def CNN_scale_format(df_input, df_output, log_noise=1, scaler=MinMaxScaler()):
 
     df_input_scaled = []
 
+    # scale and format input
     for df in df_input:
-        df_input_scaled.append(data_scale(df, scaler, LOG_SCALE))
-
-    df_output_scaled, output_scaler = data_scale(
-        df_output, scaler, LOG_SCALE, output=True
-    )
+        df_input_scaled.append(data_scale(df, scaler=scaler))
 
     data_scaled = np.dstack(df_input_scaled)
     data_scaled = np.expand_dims(data_scaled, axis=1)
     data_scaled = torch.tensor(data_scaled, dtype=torch.float)
 
+    # scale and format output
+    df_output_scaled, output_scaler = data_scale(
+        df_output, log_noise=log_noise, scaler=scaler, output=True
+    )
     target_scaled = df_output_scaled.copy().values
     target_scaled = torch.tensor(target_scaled, dtype=torch.float)
 
