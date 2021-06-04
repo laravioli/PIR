@@ -5,10 +5,11 @@ import torch
 from math import floor
 
 
-def data_scale(df, scaler, log_scale=False, output=False):
+def data_scale(df, scaler, LOG_SCALE=False, output=False):
 
-    if log_scale:
-        df = df.apply(lambda x: x.clip(lower=x[x > 0].min()) if x.min() <= 0 else x)
+    if LOG_SCALE:
+        # df = df.apply(lambda x: x.clip(lower=x[x > 0].min()) if x.min() <= 0 else x)
+        df = df.apply(lambda x: x.clip(lower=0.01) if x.min() <= 0 else x)
         df = df.apply(lambda x: np.log10(x))
 
     scaler = scaler

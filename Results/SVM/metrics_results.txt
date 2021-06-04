@@ -1,3 +1,11 @@
+logarithme:
+
 MAE       2.470581
 MSE     299.394986
 RMSE     12.170500
+
+linear: 
+
+MAE     1.836601e+03
+MSE     1.176790e+08
+RMSE    1.972517e+03
