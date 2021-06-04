@@ -77,3 +77,8 @@ comment est calculer l'erreur ?
 sample par sample, en appliquant des poids aux output, puis en prenant la moyenne
 sur le vecteur output. par default, poids uniforme (donc on fait la moyenne sur les outputs)
 sklearn: multioutput= "raw_values", permet d'avoir la metric output par output
+
+04/06 nb : penser à éventuellement changer les valeurs df_pred qui ont été modifier pour log
+nb: inclure les données de test dans le scaling ne change pas le scaling du train
+car le train a des valeurs max plus élevés. mais faire attention pour des périodes plus vieille
+de test
