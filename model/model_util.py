@@ -18,34 +18,49 @@ def data_scale(df, log_noise=1, scaler=MinMaxScaler(), output=False):
     # sklearn scaling
     scaler = scaler
     scaler.fit(df)
-    df_scaled = pd.DataFrame(scaler.transform(df), index=df.index, columns=df.columns)
-
+    data_scaled = scaler.transform(df)
+    # return a numpy array with scaled data
     if output:
-        return df_scaled, scaler
+        return data_scaled, scaler
     else:
-        return df_scaled
+        return data_scaled
 
 
-def CNN_scale_format(df_input, df_output, log_noise=1, scaler=MinMaxScaler()):
+def CNN_scale_format(df_input, df_target, log_noise=1, scaler=MinMaxScaler()):
 
-    df_input_scaled = []
+    data_input_scaled = []
 
     # scale and format input
     for df in df_input:
-        df_input_scaled.append(data_scale(df, scaler=scaler))
+        data_input_scaled.append(data_scale(df, scaler=scaler))
 
-    data_scaled = np.dstack(df_input_scaled)
+    data_scaled = np.dstack(data_input_scaled)
     data_scaled = np.expand_dims(data_scaled, axis=1)
     data_scaled = torch.tensor(data_scaled, dtype=torch.float)
 
     # scale and format output
-    df_output_scaled, output_scaler = data_scale(
-        df_output, log_noise=log_noise, scaler=scaler, output=True
+    target_scaled, output_scaler = data_scale(
+        df_target, log_noise=log_noise, scaler=scaler, output=True
     )
-    target_scaled = df_output_scaled.copy().values
     target_scaled = torch.tensor(target_scaled, dtype=torch.float)
 
     return data_scaled, target_scaled, output_scaler
+
+
+def FNN_scale_format(df_input, df_target, log_noise=1, scaler=MinMaxScaler()):
+
+    # scale and format input
+    data_input = pd.concat(df_input, axis=1)
+    input_scaled = data_scale(data_input, scaler=scaler)
+    input_scaled = torch.tensor(input_scaled, dtype=torch.float)
+
+    # scale and format target
+    target_scaled, output_scaler = data_scale(
+        df_target, log_noise=log_noise, scaler=scaler, output=True
+    )
+    target_scaled = torch.tensor(target_scaled, dtype=torch.float)
+
+    return input_scaled, target_scaled, output_scaler
 
     """
 Utility function for computing output of convolutions
