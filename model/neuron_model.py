@@ -92,7 +92,7 @@ Laboratory for CNN shape
 """
 
 
-print("conv1 :", conv_output_shape((34, 3), 3, pad=2), 36 * 5 * 100)
-print("maxpool2d :", conv_output_shape((36, 5), (1, 3), stride=1), 36 * 3 * 100)
-print("conv2 :", conv_output_shape((36, 3), 3, pad=1), 36 * 3 * 200)
-print("maxpool2d :", conv_output_shape((36, 3), 3, stride=(1, 1)), 34 * 200)
+# print("conv1 :", conv_output_shape((34, 3), 3, pad=2), 36 * 5 * 100)
+# print("maxpool2d :", conv_output_shape((36, 5), (1, 3), stride=1), 36 * 3 * 100)
+# print("conv2 :", conv_output_shape((36, 3), 3, pad=1), 36 * 3 * 200)
+# print("maxpool2d :", conv_output_shape((36, 3), 3, stride=(1, 1)), 34 * 200)
