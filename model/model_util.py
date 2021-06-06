@@ -3,16 +3,16 @@ import pandas as pd
 import torch
 
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
 from math import floor
 
 
-def data_scale(df, log_noise=1, scaler=MinMaxScaler(), output=False):
-    # log scaling
-    if log_noise <= 0:
-        log_noise = 1
-    df = df.apply(
-        lambda x: x.clip(lower=x[x > 0].min() * log_noise) if x.min() <= 0 else x
-    )
+def data_log_scaler(df, log_noise=1, scaler=MinMaxScaler(), output=False):
+
+    # log transformation
+    log_noise = 1 if log_noise <= 0 else log_noise
+    noise = lambda x: x.clip(lower=x[x > 0].min() * log_noise) if x.min() <= 0 else x
+    df = df.apply(noise)
     df = df.apply(lambda x: np.log10(x))
 
     # sklearn scaling
@@ -24,6 +24,43 @@ def data_scale(df, log_noise=1, scaler=MinMaxScaler(), output=False):
         return data_scaled, scaler
     else:
         return data_scaled
+
+
+def data_formatter(data_input, data_target, network, window=1):
+
+    if network == "mlp":
+        data_input = np.concatenate(data_input, axis=1)
+
+    elif network == "cnn_v1":
+        data_input = np.dstack(data_input)
+        data_input = np.expand_dims(data_input, axis=1)
+
+    elif network == "cnn_v2":
+        for i, data in enumerate(data_input):
+            list = np.split(data, len(data) / window)
+            data_input[i] = np.array(list)
+        data_input = np.stack(data_input, axis=1)
+
+        list = np.split(data_target, len(data_target) / window)
+        data_target = np.array(list)
+
+    return data_input, data_target
+
+
+def FNN_scale_format(df_input, df_target, log_noise=1, scaler=MinMaxScaler()):
+
+    # scale and format input
+    data_input = pd.concat(df_input, axis=1)
+    input_scaled = data_scale(data_input, scaler=scaler)
+    input_scaled = torch.tensor(input_scaled, dtype=torch.float)
+
+    # scale and format target
+    target_scaled, output_scaler = data_scale(
+        df_target, log_noise=log_noise, scaler=scaler, output=True
+    )
+    target_scaled = torch.tensor(target_scaled, dtype=torch.float)
+
+    return input_scaled, target_scaled, output_scaler
 
 
 def CNN_scale_format(df_input, df_target, log_noise=1, scaler=MinMaxScaler()):
@@ -47,20 +84,39 @@ def CNN_scale_format(df_input, df_target, log_noise=1, scaler=MinMaxScaler()):
     return data_scaled, target_scaled, output_scaler
 
 
-def FNN_scale_format(df_input, df_target, log_noise=1, scaler=MinMaxScaler()):
+def CNN_v2_scale_format(
+    df_input, df_target, log_noise=1, scaler=MinMaxScaler(), window=40
+):
+
+    len = 4720
+    data_input_scaled = []
 
     # scale and format input
-    data_input = pd.concat(df_input, axis=1)
-    input_scaled = data_scale(data_input, scaler=scaler)
-    input_scaled = torch.tensor(input_scaled, dtype=torch.float)
+    for i, df in enumerate(df_input):
+        data_input_scaled.append(data_scale(df, scaler=scaler))
+        data_input_scaled[i] = np.array(
+            np.split(data_input_scaled[i][:len], len / window)
+        )
 
-    # scale and format target
+    data_scaled = np.stack(data_input_scaled, axis=1)
+    data_scaled = torch.tensor(data_scaled, dtype=torch.float)
+
+    # scale and format output
     target_scaled, output_scaler = data_scale(
         df_target, log_noise=log_noise, scaler=scaler, output=True
     )
+    target_scaled = np.array(np.split(target_scaled[:len], len / window))
     target_scaled = torch.tensor(target_scaled, dtype=torch.float)
 
-    return input_scaled, target_scaled, output_scaler
+    return data_scaled, target_scaled, output_scaler
+
+
+def data_splitter(df_input, df_output, window):
+    if nn_type == "cnn_v2":
+        split = int(4720 / window * 0.15)
+    else:
+        split = int(len(df.index) * 0.15)
+    return split
 
     """
 Utility function for computing output of convolutions

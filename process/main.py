@@ -21,10 +21,10 @@ for df_Ch in dfs:
     df_Ch = df_Ch[df_Ch != -1].interpolate(methode="linear")
     df_Ch = resample_time(df_Ch, df_Ch022)
 
-    dfs_processed.append(df_Ch)
+    dfs_processed.append(df_Ch.iloc[0:4720])
 
 df_Ch022 = df_Ch022[df_Ch022 != -1].interpolate(methode="linear")
-dfs_processed.append(df_Ch022)
+dfs_processed.append(df_Ch022.iloc[0:4720])
 
 name = ["Ch001", "Ch009", "Ch020", "Ch022"]
 for name, df_Ch in zip(name, dfs_processed):

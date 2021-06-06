@@ -82,3 +82,5 @@ sklearn: multioutput= "raw_values", permet d'avoir la metric output par output
 nb: inclure les données de test dans le scaling ne change pas le scaling du train
 car le train a des valeurs max plus élevés. mais faire attention pour des périodes plus vieille
 de test
+
+06/06 retravailler les fonctions de dimensionnement pour cnn_v2, essayer d'augmenter le fenetre temporelle
