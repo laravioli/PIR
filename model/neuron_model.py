@@ -5,9 +5,10 @@ import torch.nn.functional as F
 from model_util import *
 
 
-class FNN(nn.Module):
+class MLP(nn.Module):
     def __init__(self, size=3):
-        super(FNN, self).__init__()
+        super(MLP, self).__init__()
+
         self.fc1 = nn.Linear(34 * size, 500)
         self.fc2 = nn.Linear(500, 200)
         self.fc3 = nn.Linear(200, 34)
@@ -15,6 +16,7 @@ class FNN(nn.Module):
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
+        x = self.fc3(x)
         return x
 
 
@@ -58,9 +60,11 @@ class CNN_v2(nn.Module):
         super(CNN_v2, self).__init__()
 
         self.convlayer1 = nn.Sequential(
-            nn.Conv2d(3, 50, 3, padding=1),
+            nn.Conv2d(3, 100, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(50, 50, 3, padding=1),
+            nn.Conv2d(100, 200, 3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(200, 50, 3, padding=1),
             nn.ReLU(),
             nn.Conv2d(50, 1, 3, padding=1),
         )

@@ -43,80 +43,27 @@ def data_formatter(data_input, data_target, network, window=1):
 
         list = np.split(data_target, len(data_target) / window)
         data_target = np.array(list)
+    else:
+        print("carefull, u must have misswritten network name")
 
     return data_input, data_target
 
 
-def FNN_scale_format(df_input, df_target, log_noise=1, scaler=MinMaxScaler()):
+def formatting_data_2(data_input):
+    size = 4720
+    data_input = np.stack(data_input, axis=1)
 
-    # scale and format input
-    data_input = pd.concat(df_input, axis=1)
-    input_scaled = data_scale(data_input, scaler=scaler)
-    input_scaled = torch.tensor(input_scaled, dtype=torch.float)
+    data = list()
+    n1, n2 = 0, 118
+    data.append(data_input[n1:n2])
+    while n2 < size:
+        n1 += 59
+        n2 += 59
+        data.append(data_input[n1:n2])
 
-    # scale and format target
-    target_scaled, output_scaler = data_scale(
-        df_target, log_noise=log_noise, scaler=scaler, output=True
-    )
-    target_scaled = torch.tensor(target_scaled, dtype=torch.float)
-
-    return input_scaled, target_scaled, output_scaler
-
-
-def CNN_scale_format(df_input, df_target, log_noise=1, scaler=MinMaxScaler()):
-
-    data_input_scaled = []
-
-    # scale and format input
-    for df in df_input:
-        data_input_scaled.append(data_scale(df, scaler=scaler))
-
-    data_scaled = np.dstack(data_input_scaled)
-    data_scaled = np.expand_dims(data_scaled, axis=1)
-    data_scaled = torch.tensor(data_scaled, dtype=torch.float)
-
-    # scale and format output
-    target_scaled, output_scaler = data_scale(
-        df_target, log_noise=log_noise, scaler=scaler, output=True
-    )
-    target_scaled = torch.tensor(target_scaled, dtype=torch.float)
-
-    return data_scaled, target_scaled, output_scaler
-
-
-def CNN_v2_scale_format(
-    df_input, df_target, log_noise=1, scaler=MinMaxScaler(), window=40
-):
-
-    len = 4720
-    data_input_scaled = []
-
-    # scale and format input
-    for i, df in enumerate(df_input):
-        data_input_scaled.append(data_scale(df, scaler=scaler))
-        data_input_scaled[i] = np.array(
-            np.split(data_input_scaled[i][:len], len / window)
-        )
-
-    data_scaled = np.stack(data_input_scaled, axis=1)
-    data_scaled = torch.tensor(data_scaled, dtype=torch.float)
-
-    # scale and format output
-    target_scaled, output_scaler = data_scale(
-        df_target, log_noise=log_noise, scaler=scaler, output=True
-    )
-    target_scaled = np.array(np.split(target_scaled[:len], len / window))
-    target_scaled = torch.tensor(target_scaled, dtype=torch.float)
-
-    return data_scaled, target_scaled, output_scaler
-
-
-def data_splitter(df_input, df_output, window):
-    if nn_type == "cnn_v2":
-        split = int(4720 / window * 0.15)
-    else:
-        split = int(len(df.index) * 0.15)
-    return split
+    a = np.array(data)
+    a = np.swapaxes(a, 1, 2)
+    return a
 
     """
 Utility function for computing output of convolutions
